@@ -2,13 +2,14 @@
 # Conditional build:
 %bcond_with	tests	# unit tests (broken with python 2.7 and 3+)
 %bcond_without	python2 # CPython 2.x module
-%bcond_without	python3 # CPython 3.x module
+%bcond_with	python3 # CPython 3.x module (old setuptools required)
 
 Summary:	Mustache for Python 2
 Summary(pl.UTF-8):	Mustache dla Pythona 2
 Name:		python-pystache
+# keep 0.5.x here for python2 support
 Version:	0.5.4
-Release:	7
+Release:	8
 License:	MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/pystache/
@@ -87,6 +88,7 @@ rm -rf $RPM_BUILD_ROOT
 	$RPM_BUILD_ROOT%{_bindir}/pystache-test
 
 %{__mv} $RPM_BUILD_ROOT%{_bindir}/pystache{,-3}
+ln -sf pystache-3 $RPM_BUILD_ROOT%{_bindir}/pystache
 %endif
 
 %if %{with python2}
@@ -98,7 +100,6 @@ rm -rf $RPM_BUILD_ROOT
 	$RPM_BUILD_ROOT%{_bindir}/pystache-test
 
 %{__mv} $RPM_BUILD_ROOT%{_bindir}/pystache{,-2}
-ln -sf pystache-2 $RPM_BUILD_ROOT%{_bindir}/pystache
 %endif
 
 %clean
@@ -108,7 +109,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc HISTORY.md LICENSE README.md TODO.md
-%attr(755,root,root) %{_bindir}/pystache
 %attr(755,root,root) %{_bindir}/pystache-2
 %{py_sitescriptdir}/pystache
 %{py_sitescriptdir}/pystache-%{version}-py*.egg-info
@@ -118,6 +118,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n python3-pystache
 %defattr(644,root,root,755)
 %doc HISTORY.md LICENSE README.md TODO.md
+%attr(755,root,root) %{_bindir}/pystache
 %attr(755,root,root) %{_bindir}/pystache-3
 %{py3_sitescriptdir}/pystache
 %{py3_sitescriptdir}/pystache-%{version}-py*.egg-info
